@@ -29,11 +29,11 @@
 extern "C" {
 #include "E2SM-KPM-IndicationHeader-Format1.h"
 #include "E2SM-KPM-IndicationMessage-Format1.h"
-#include "GlobalE2node-ID.h"
-#include "GlobalE2node-gNB-ID.h"
-#include "GlobalE2node-eNB-ID.h"
-#include "GlobalE2node-ng-eNB-ID.h"
-#include "GlobalE2node-en-gNB-ID.h"
+#include "GlobalKPMnode-ID.h"
+#include "GlobalKPMnode-gNB-ID.h"
+#include "GlobalKPMnode-eNB-ID.h"
+#include "GlobalKPMnode-ng-eNB-ID.h"
+#include "GlobalKPMnode-en-gNB-ID.h"
 #include "NRCGI.h"
 #include "PM-Containers-Item.h"
 #include "RIC-EventTriggerStyle-Item.h"
@@ -102,23 +102,23 @@ KpmIndicationHeader::FillAndEncodeKpmRicIndicationHeader (E2SM_KPM_IndicationHea
   Ptr<OctetString> plmnid = Create<OctetString> (values.m_plmId, 3);
   Ptr<BitString> cellId_bstring;
 
-  GlobalE2node_ID *globalE2nodeIdBuf = (GlobalE2node_ID *) calloc (1, sizeof (GlobalE2node_ID));
-  ind_header->id_GlobalE2node_ID = *globalE2nodeIdBuf;
+  GlobalKPMnode_ID *globalKPMnodeIdBuf = (GlobalKPMnode_ID *) calloc (1, sizeof (GlobalKPMnode_ID));
+  ind_header->id_GlobalKPMnode_ID = globalKPMnodeIdBuf;
 
   switch (m_nodeType)
     {
       case gNB: {
         static int sizeGnb = 4; // 3GPP Specs
-        
+
         cellId_bstring = Create<BitString> (values.m_gnbId, sizeGnb);
 
-        ind_header->id_GlobalE2node_ID.present = GlobalE2node_ID_PR_gNB;
-        GlobalE2node_gNB_ID_t *globalE2node_gNB_ID =
-            (GlobalE2node_gNB_ID_t *) calloc (1, sizeof (GlobalE2node_gNB_ID_t));
-        globalE2node_gNB_ID->global_gNB_ID.plmn_id = plmnid->GetValue ();
-        globalE2node_gNB_ID->global_gNB_ID.gnb_id.present = GNB_ID_Choice_PR_gnb_ID;
-        globalE2node_gNB_ID->global_gNB_ID.gnb_id.choice.gnb_ID = cellId_bstring->GetValue ();
-        ind_header->id_GlobalE2node_ID.choice.gNB = globalE2node_gNB_ID;
+        ind_header->id_GlobalKPMnode_ID->present = GlobalKPMnode_ID_PR_gNB;
+        GlobalKPMnode_gNB_ID_t *globalKPMnode_gNB_ID =
+            (GlobalKPMnode_gNB_ID_t *) calloc (1, sizeof (GlobalKPMnode_gNB_ID_t));
+        globalKPMnode_gNB_ID->global_gNB_ID.plmn_id = plmnid->GetValue ();
+        globalKPMnode_gNB_ID->global_gNB_ID.gnb_id.present = GNB_ID_Choice_PR_gnb_ID;
+        globalKPMnode_gNB_ID->global_gNB_ID.gnb_id.choice.gnb_ID = cellId_bstring->GetValue ();
+        ind_header->id_GlobalKPMnode_ID->choice.gNB = globalKPMnode_gNB_ID;
       }
       break;
 
@@ -126,16 +126,16 @@ KpmIndicationHeader::FillAndEncodeKpmRicIndicationHeader (E2SM_KPM_IndicationHea
         static int sizeEnb =
             3; // 3GPP TS 36.413 version 14.8.0 Release 14, Section 9.2.1.37 Global eNB ID
         static int unsedSizeEnb = 4;
-        
+
         cellId_bstring = Create<BitString> (values.m_gnbId, sizeEnb, unsedSizeEnb);
-        
-        ind_header->id_GlobalE2node_ID.present = GlobalE2node_ID_PR_eNB;
-        GlobalE2node_eNB_ID_t *globalE2node_eNB_ID =
-            (GlobalE2node_eNB_ID_t *) calloc (1, sizeof (GlobalE2node_eNB_ID_t));
-        globalE2node_eNB_ID->global_eNB_ID.pLMN_Identity = plmnid->GetValue ();
-        globalE2node_eNB_ID->global_eNB_ID.eNB_ID.present = ENB_ID_PR_macro_eNB_ID;
-        globalE2node_eNB_ID->global_eNB_ID.eNB_ID.choice.macro_eNB_ID = cellId_bstring->GetValue ();
-        ind_header->id_GlobalE2node_ID.choice.eNB = globalE2node_eNB_ID;
+
+        ind_header->id_GlobalKPMnode_ID->present = GlobalKPMnode_ID_PR_eNB;
+        GlobalKPMnode_eNB_ID_t *globalKPMnode_eNB_ID =
+            (GlobalKPMnode_eNB_ID_t *) calloc (1, sizeof (GlobalKPMnode_eNB_ID_t));
+        globalKPMnode_eNB_ID->global_eNB_ID.pLMN_Identity = plmnid->GetValue ();
+        globalKPMnode_eNB_ID->global_eNB_ID.eNB_ID.present = ENB_ID_PR_macro_eNB_ID;
+        globalKPMnode_eNB_ID->global_eNB_ID.eNB_ID.choice.macro_eNB_ID = cellId_bstring->GetValue ();
+        ind_header->id_GlobalKPMnode_ID->choice.eNB = globalKPMnode_eNB_ID;
       }
       break;
 
@@ -146,15 +146,15 @@ KpmIndicationHeader::FillAndEncodeKpmRicIndicationHeader (E2SM_KPM_IndicationHea
 
         cellId_bstring = Create<BitString> (values.m_gnbId, sizeEnb, unsedSizeEnb);
 
-        ind_header->id_GlobalE2node_ID.present = GlobalE2node_ID_PR_ng_eNB;
-        GlobalE2node_ng_eNB_ID_t *globalE2node_ng_eNB_ID =
-            (GlobalE2node_ng_eNB_ID_t *) calloc (1, sizeof (GlobalE2node_ng_eNB_ID_t));
+        ind_header->id_GlobalKPMnode_ID->present = GlobalKPMnode_ID_PR_ng_eNB;
+        GlobalKPMnode_ng_eNB_ID_t *globalKPMnode_ng_eNB_ID =
+            (GlobalKPMnode_ng_eNB_ID_t *) calloc (1, sizeof (GlobalKPMnode_ng_eNB_ID_t));
 
-        globalE2node_ng_eNB_ID->global_ng_eNB_ID.plmn_id = plmnid->GetValue ();
-        globalE2node_ng_eNB_ID->global_ng_eNB_ID.enb_id.present = ENB_ID_Choice_PR_enb_ID_macro;
-        globalE2node_ng_eNB_ID->global_ng_eNB_ID.enb_id.choice.enb_ID_macro =
+        globalKPMnode_ng_eNB_ID->global_ng_eNB_ID.plmn_id = plmnid->GetValue ();
+        globalKPMnode_ng_eNB_ID->global_ng_eNB_ID.enb_id.present = ENB_ID_Choice_PR_enb_ID_macro;
+        globalKPMnode_ng_eNB_ID->global_ng_eNB_ID.enb_id.choice.enb_ID_macro =
             cellId_bstring->GetValue ();
-        ind_header->id_GlobalE2node_ID.choice.ng_eNB = globalE2node_ng_eNB_ID;
+        ind_header->id_GlobalKPMnode_ID->choice.ng_eNB = globalKPMnode_ng_eNB_ID;
       }
       break;
 
@@ -162,13 +162,13 @@ KpmIndicationHeader::FillAndEncodeKpmRicIndicationHeader (E2SM_KPM_IndicationHea
         static int sizeGnb = 4; // 3GPP Specs
         cellId_bstring = Create<BitString> (values.m_gnbId, sizeGnb);
 
-        ind_header->id_GlobalE2node_ID.present = GlobalE2node_ID_PR_en_gNB;
-        GlobalE2node_en_gNB_ID_t *globalE2node_en_gNB_ID =
-            (GlobalE2node_en_gNB_ID_t *) calloc (1, sizeof (GlobalE2node_en_gNB_ID_t));
-        globalE2node_en_gNB_ID->global_gNB_ID.pLMN_Identity = plmnid->GetValue ();
-        globalE2node_en_gNB_ID->global_gNB_ID.gNB_ID.present = ENGNB_ID_PR_gNB_ID;
-        globalE2node_en_gNB_ID->global_gNB_ID.gNB_ID.choice.gNB_ID = cellId_bstring->GetValue ();
-        ind_header->id_GlobalE2node_ID.choice.en_gNB = globalE2node_en_gNB_ID;
+        ind_header->id_GlobalKPMnode_ID->present = GlobalKPMnode_ID_PR_en_gNB;
+        GlobalKPMnode_en_gNB_ID_t *globalKPMnode_en_gNB_ID =
+            (GlobalKPMnode_en_gNB_ID_t *) calloc (1, sizeof (GlobalKPMnode_en_gNB_ID_t));
+        globalKPMnode_en_gNB_ID->global_gNB_ID.pLMN_Identity = plmnid->GetValue ();
+        globalKPMnode_en_gNB_ID->global_gNB_ID.gNB_ID.present = ENGNB_ID_PR_gNB_ID;
+        globalKPMnode_en_gNB_ID->global_gNB_ID.gNB_ID.choice.gNB_ID = cellId_bstring->GetValue ();
+        ind_header->id_GlobalKPMnode_ID->choice.en_gNB = globalKPMnode_en_gNB_ID;
       }
       break;
 
@@ -181,14 +181,14 @@ KpmIndicationHeader::FillAndEncodeKpmRicIndicationHeader (E2SM_KPM_IndicationHea
     NS_LOG_DEBUG ("Timestamp received: " << values.m_timestamp);
     long bigEndianTimestamp = htobe64 (values.m_timestamp);
     NS_LOG_DEBUG ("Timestamp inverted: " << bigEndianTimestamp);
-    
+
     Ptr<OctetString> ts = Create<OctetString> ((void *) &bigEndianTimestamp, TIMESTAMP_LIMIT_SIZE);
     //NS_LOG_INFO (xer_fprint (stderr, &asn_DEF_OCTET_STRING, ts->GetPointer() ));
-    
+
     // Ptr<OctetString> ts2 = Create<OctetString> ((void *) &values.m_timestamp, TIMESTAMP_LIMIT_SIZE);
     // NS_LOG_INFO (xer_fprint (stderr, &asn_DEF_OCTET_STRING, ts2->GetPointer()));
 
-    ind_header->collectionStartTime = ts->GetValue ();
+    // ind_header->collectionStartTime = ts->GetValue ();
 
 
     NS_LOG_INFO (xer_fprint (stderr, &asn_DEF_E2SM_KPM_IndicationHeader_Format1, ind_header));
@@ -198,7 +198,7 @@ KpmIndicationHeader::FillAndEncodeKpmRicIndicationHeader (E2SM_KPM_IndicationHea
 
     Encode (descriptor);
     ASN_STRUCT_FREE (asn_DEF_E2SM_KPM_IndicationHeader_Format1, ind_header);
-    free (globalE2nodeIdBuf);
+    free (globalKPMnodeIdBuf);
     // TraceMessage (&asn_DEF_E2SM_KPM_IndicationHeader, header, "RIC Indication Header");
 }
 
@@ -285,16 +285,16 @@ KpmIndicationMessage::FillOCuUpContainer (PF_Container_t *ranContainer,
   OCUUP_PF_Container_t* ocuup = (OCUUP_PF_Container_t*) calloc (1, sizeof (OCUUP_PF_Container_t));
   PF_ContainerListItem_t* pcli = (PF_ContainerListItem_t*) calloc (1, sizeof (PF_ContainerListItem_t));
   pcli->interface_type = NI_Type_x2_u;
-  
-  CUUPMeasurement_Container_t* cuuppmc = (CUUPMeasurement_Container_t*) calloc (1, sizeof (CUUPMeasurement_Container_t)); 
-  PlmnID_Item_t* plmnItem = (PlmnID_Item_t*) calloc (1, sizeof (PlmnID_Item_t)); 
+
+  CUUPMeasurement_Container_t* cuuppmc = (CUUPMeasurement_Container_t*) calloc (1, sizeof (CUUPMeasurement_Container_t));
+  PlmnID_Item_t* plmnItem = (PlmnID_Item_t*) calloc (1, sizeof (PlmnID_Item_t));
   Ptr<OctetString> plmnidstr = Create<OctetString> (values->m_plmId, 3);
   plmnItem->pLMN_Identity = plmnidstr->GetValue ();
-  
+
   EPC_CUUP_PM_Format_t* cuuppmf = (EPC_CUUP_PM_Format_t*) calloc (1, sizeof (EPC_CUUP_PM_Format_t));
   plmnItem->cu_UP_PM_EPC = cuuppmf;
   PerQCIReportListItemFormat_t* pqrli = (PerQCIReportListItemFormat_t*) calloc (1, sizeof (PerQCIReportListItemFormat_t));
-  pqrli->drbqci = 0;
+  pqrli->qci = 0;
 
   INTEGER_t *pDCPBytesDL = (INTEGER_t *) calloc (1, sizeof (INTEGER_t));
   INTEGER_t *pDCPBytesUL = (INTEGER_t *) calloc (1, sizeof (INTEGER_t));
@@ -305,7 +305,7 @@ KpmIndicationMessage::FillOCuUpContainer (PF_Container_t *ranContainer,
   pqrli->pDCPBytesDL = pDCPBytesDL;
   pqrli->pDCPBytesUL = pDCPBytesUL;
 
-  ASN_SEQUENCE_ADD (&cuuppmf->perQCIReportList_cuup.list, pqrli);
+  ASN_SEQUENCE_ADD (&cuuppmf->perQCIReportList.list, pqrli);
 
   ASN_SEQUENCE_ADD (&cuuppmc->plmnList.list, plmnItem);
 
@@ -334,7 +334,7 @@ KpmIndicationMessage::FillODuContainer (PF_Container_t *ranContainer,
                                         Ptr<ODuContainerValues> values)
 {
   ODU_PF_Container_t *odu = (ODU_PF_Container_t *) calloc (1, sizeof (ODU_PF_Container_t));
-  
+
   for (auto cellReport : values->m_cellResourceReportItems)
     {
       NS_LOG_LOGIC ("O-DU: Add Cell Resource Report Item");
@@ -349,12 +349,12 @@ KpmIndicationMessage::FillODuContainer (PF_Container_t *ranContainer,
       long *dlAvailablePrbs = (long *) calloc (1, sizeof (long));
       *dlAvailablePrbs = cellReport->dlAvailablePrbs;
       crrli->dl_TotalofAvailablePRBs = dlAvailablePrbs;
-      
+
       long *ulAvailablePrbs = (long *) calloc (1, sizeof (long));
       *ulAvailablePrbs = cellReport->ulAvailablePrbs;
       crrli->ul_TotalofAvailablePRBs = ulAvailablePrbs;
       ASN_SEQUENCE_ADD (&odu->cellResourceReportList.list, crrli);
-      
+
       for (auto servedPlmnCell : cellReport->m_servedPlmnPerCellItems)
         {
           NS_LOG_LOGIC ("O-DU: Add Served Plmn Per Cell Item");
@@ -362,7 +362,7 @@ KpmIndicationMessage::FillODuContainer (PF_Container_t *ranContainer,
               (ServedPlmnPerCellListItem_t *) calloc (1, sizeof (ServedPlmnPerCellListItem_t));
           Ptr<OctetString> servedPlmnId = Create<OctetString> (servedPlmnCell->m_plmId, 3);
           sppcl->pLMN_Identity = servedPlmnId->GetValue ();
-          
+
           EPC_DU_PM_Container_t *edpc =
               (EPC_DU_PM_Container_t *) calloc (1, sizeof (EPC_DU_PM_Container_t));
 
@@ -372,20 +372,20 @@ KpmIndicationMessage::FillODuContainer (PF_Container_t *ranContainer,
               PerQCIReportListItem_t *pqrl =
                   (PerQCIReportListItem_t *) calloc (1, sizeof (PerQCIReportListItem_t));
               pqrl->qci = perQciReportItem->m_qci;
-              
-              NS_ABORT_MSG_IF ((perQciReportItem->m_dlPrbUsage < 0) | (perQciReportItem->m_dlPrbUsage > 100), 
+
+              NS_ABORT_MSG_IF ((perQciReportItem->m_dlPrbUsage < 0) | (perQciReportItem->m_dlPrbUsage > 100),
                               "As per ASN definition, dl_PRBUsage should be between 0 and 100");
               long *dlUsedPrbs = (long *) calloc (1, sizeof (long));
               *dlUsedPrbs = perQciReportItem->m_dlPrbUsage;
               pqrl->dl_PRBUsage = dlUsedPrbs;
               NS_LOG_LOGIC ("DL PRBs " << dlUsedPrbs);
-              
-              NS_ABORT_MSG_IF ((perQciReportItem->m_ulPrbUsage < 0) | (perQciReportItem->m_ulPrbUsage > 100), 
+
+              NS_ABORT_MSG_IF ((perQciReportItem->m_ulPrbUsage < 0) | (perQciReportItem->m_ulPrbUsage > 100),
                               "As per ASN definition, ul_PRBUsage should be between 0 and 100");
               long *ulUsedPrbs = (long *) calloc (1, sizeof (long));
               *ulUsedPrbs = perQciReportItem->m_ulPrbUsage;
               pqrl->ul_PRBUsage = ulUsedPrbs;
-              ASN_SEQUENCE_ADD (&edpc->perQCIReportList_du.list, pqrl);
+              ASN_SEQUENCE_ADD (&edpc->perQCIReportList.list, pqrl);
             }
 
           sppcl->du_PM_EPC = edpc;
@@ -415,65 +415,65 @@ KpmIndicationMessage::FillAndEncodeKpmIndicationMessage (E2SM_KPM_IndicationMess
   ASN_SEQUENCE_ADD (&format->pm_Containers.list, containers_list);
 
   // Cell Object ID
-  CellObjectID_t *cellObjectID = (CellObjectID_t *) calloc (1, sizeof (CellObjectID_t));
-  cellObjectID->size = values.m_cellObjectId.length ();
-  cellObjectID->buf = (uint8_t *) calloc (1, cellObjectID->size);
-  memcpy (cellObjectID->buf, values.m_cellObjectId.c_str (), values.m_cellObjectId.length ());
-  format->cellObjectID = *cellObjectID;
-  
+  // CellObjectID_t *cellObjectID = (CellObjectID_t *) calloc (1, sizeof (CellObjectID_t));
+  // cellObjectID->size = values.m_cellObjectId.length ();
+  // cellObjectID->buf = (uint8_t *) calloc (1, cellObjectID->size);
+  // memcpy (cellObjectID->buf, values.m_cellObjectId.c_str (), values.m_cellObjectId.length ());
+  // format->cellObjectID = *cellObjectID;
+
   // Measurement Information List
   if (values.m_cellMeasurementItems)
   {
-      format->list_of_PM_Information = (E2SM_KPM_IndicationMessage_Format1::
-                                        E2SM_KPM_IndicationMessage_Format1__list_of_PM_Information *) 
-                                        calloc (1, sizeof (E2SM_KPM_IndicationMessage_Format1::
-                                        E2SM_KPM_IndicationMessage_Format1__list_of_PM_Information));
-    for (auto item : values.m_cellMeasurementItems->GetItems ())
-    {
-      ASN_SEQUENCE_ADD (&format->list_of_PM_Information->list, item->GetPointer ());
-    }
+    //   format->list_of_PM_Information = (E2SM_KPM_IndicationMessage_Format1::
+    //                                     E2SM_KPM_IndicationMessage_Format1__list_of_PM_Information *)
+    //                                     calloc (1, sizeof (E2SM_KPM_IndicationMessage_Format1::
+    //                                     E2SM_KPM_IndicationMessage_Format1__list_of_PM_Information));
+    // for (auto item : values.m_cellMeasurementItems->GetItems ())
+    // {
+    //   ASN_SEQUENCE_ADD (&format->list_of_PM_Information->list, item->GetPointer ());
+    // }
   }
-  
+
   // List of matched UEs
   if (values.m_ueIndications.size () > 0)
   {
-    format->list_of_matched_UEs = (E2SM_KPM_IndicationMessage_Format1_t::E2SM_KPM_IndicationMessage_Format1__list_of_matched_UEs*) 
-                                   calloc (1, sizeof (E2SM_KPM_IndicationMessage_Format1_t::E2SM_KPM_IndicationMessage_Format1__list_of_matched_UEs));
+    // format->list_of_matched_UEs = (E2SM_KPM_IndicationMessage_Format1_t::E2SM_KPM_IndicationMessage_Format1__list_of_matched_UEs*)
+    //                                calloc (1, sizeof (E2SM_KPM_IndicationMessage_Format1_t::E2SM_KPM_IndicationMessage_Format1__list_of_matched_UEs));
 
 
-    for (auto ueIndication : values.m_ueIndications)
-      {
-        PerUE_PM_Item_t *perUEItem = (PerUE_PM_Item_t *) calloc (1, sizeof (PerUE_PM_Item_t));
-
-        // UE Identity
-        perUEItem->ueId = ueIndication->GetId ();
-        // xer_fprint (stderr, &asn_DEF_UE_Identity, &perUEItem->ueId);
-        // NS_LOG_UNCOND ("Values " << ueIndication->m_drbIPLateDlUEID);
-
-        // List of Measurements PM information
-        perUEItem->list_of_PM_Information =
-            (PerUE_PM_Item::PerUE_PM_Item__list_of_PM_Information *) calloc (
-                1, sizeof (PerUE_PM_Item::PerUE_PM_Item__list_of_PM_Information));
-
-        for (auto measurementItem : ueIndication->GetItems ())
-        {
-          ASN_SEQUENCE_ADD (&perUEItem->list_of_PM_Information->list,
-            measurementItem->GetPointer ());
-        }
-        ASN_SEQUENCE_ADD (&format->list_of_matched_UEs->list, perUEItem);
-      }
+    // for (auto ueIndication : values.m_ueIndications)
+    //   {
+    //     PerUE_PM_Item_t *perUEItem = (PerUE_PM_Item_t *) calloc (1, sizeof (PerUE_PM_Item_t));
+    //
+    //     // UE Identity
+    //     perUEItem->ueId = ueIndication->GetId ();
+    //     // xer_fprint (stderr, &asn_DEF_UE_Identity, &perUEItem->ueId);
+    //     // NS_LOG_UNCOND ("Values " << ueIndication->m_drbIPLateDlUEID);
+    //
+    //     // List of Measurements PM information
+    //     perUEItem->list_of_PM_Information =
+    //         (PerUE_PM_Item::PerUE_PM_Item__list_of_PM_Information *) calloc (
+    //             1, sizeof (PerUE_PM_Item::PerUE_PM_Item__list_of_PM_Information));
+    //
+    //     for (auto measurementItem : ueIndication->GetItems ())
+    //     {
+    //       ASN_SEQUENCE_ADD (&perUEItem->list_of_PM_Information->list,
+    //         measurementItem->GetPointer ());
+    //     }
+    //     ASN_SEQUENCE_ADD (&format->list_of_matched_UEs->list, perUEItem);
+    //   }
   }
 
   descriptor->present = E2SM_KPM_IndicationMessage_PR_indicationMessage_Format1;
   descriptor->choice.indicationMessage_Format1 = format;
-  
-  
+
+
   NS_LOG_INFO (xer_fprint (stderr, &asn_DEF_E2SM_KPM_IndicationMessage_Format1, format));
 
   // xer_fprint (stderr, &asn_DEF_PF_Container, ranContainer);
   Encode (descriptor);
 
-  free (cellObjectID);
+  // free (cellObjectID);
   // free (ranContainer);
   ASN_STRUCT_FREE (asn_DEF_E2SM_KPM_IndicationMessage_Format1, format);
 }

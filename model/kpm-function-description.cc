@@ -109,13 +109,15 @@ KpmFunctionDescription::FillAndEncodeKpmFunctionDescription (
   trigger_style->ric_EventTriggerStyle_Name.size = strlen ((char *) eventTriggerStyleNameBuffer);
   trigger_style->ric_EventTriggerFormat_Type = 1;
 
-  ranfunc_desc->ric_EventTriggerStyle_List =
+  ranfunc_desc->e2SM_KPM_RANfunction_Item.ric_EventTriggerStyle_List =
       (E2SM_KPM_RANfunction_Description::
-           E2SM_KPM_RANfunction_Description__ric_EventTriggerStyle_List *)
+          E2SM_KPM_RANfunction_Description__e2SM_KPM_RANfunction_Item::
+          E2SM_KPM_RANfunction_Description__e2SM_KPM_RANfunction_Item__ric_EventTriggerStyle_List *)
           calloc (1, sizeof (E2SM_KPM_RANfunction_Description::
-                                 E2SM_KPM_RANfunction_Description__ric_EventTriggerStyle_List));
+                E2SM_KPM_RANfunction_Description__e2SM_KPM_RANfunction_Item::
+                E2SM_KPM_RANfunction_Description__e2SM_KPM_RANfunction_Item__ric_EventTriggerStyle_List));
 
-  ASN_SEQUENCE_ADD (&ranfunc_desc->ric_EventTriggerStyle_List->list, trigger_style);
+  ASN_SEQUENCE_ADD (&ranfunc_desc->e2SM_KPM_RANfunction_Item.ric_EventTriggerStyle_List->list, trigger_style);
 
   RIC_ReportStyle_Item_t *report_style1 =
       (RIC_ReportStyle_Item_t *) calloc (1, sizeof (RIC_ReportStyle_Item_t));
@@ -132,12 +134,15 @@ KpmFunctionDescription::FillAndEncodeKpmFunctionDescription (
   report_style1->ric_ReportStyle_Name.size = strlen ((char *) reportStyleNameBuffer);
   report_style1->ric_ReportIndicationHeaderFormat_Type = 1;
   report_style1->ric_ReportIndicationMessageFormat_Type = 1;
-  ranfunc_desc->ric_ReportStyle_List =
-      (E2SM_KPM_RANfunction_Description::E2SM_KPM_RANfunction_Description__ric_ReportStyle_List *)
+  ranfunc_desc->e2SM_KPM_RANfunction_Item.ric_ReportStyle_List =
+      (E2SM_KPM_RANfunction_Description::
+       E2SM_KPM_RANfunction_Description__e2SM_KPM_RANfunction_Item::
+       E2SM_KPM_RANfunction_Description__e2SM_KPM_RANfunction_Item__ric_ReportStyle_List *)
           calloc (1, sizeof (E2SM_KPM_RANfunction_Description::
-                                 E2SM_KPM_RANfunction_Description__ric_ReportStyle_List));
+                E2SM_KPM_RANfunction_Description__e2SM_KPM_RANfunction_Item::
+                E2SM_KPM_RANfunction_Description__e2SM_KPM_RANfunction_Item__ric_ReportStyle_List));
 
-  ASN_SEQUENCE_ADD (&ranfunc_desc->ric_ReportStyle_List->list, report_style1);
+  ASN_SEQUENCE_ADD (&ranfunc_desc->e2SM_KPM_RANfunction_Item.ric_ReportStyle_List->list, report_style1);
 
   Encode (ranfunc_desc);
 
